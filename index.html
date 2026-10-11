@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Automático de Agendamiento - Bryan</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 4s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-input {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .glass-input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-brand-500 selection:text-slate-950">
+
+  <!-- Glow Background Effects -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow"></div>
+  <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow" style="animation-delay: 1.5s;"></div>
+
+  <!-- MODAL DE LOGIN / INGRESO DE NOMBRE -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-800 text-center relative overflow-hidden animate-float">
+      <div class="w-20 h-20 bg-gradient-to-tr from-brand-600 to-accent-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-500/20">
+        <i class="fa-solid fa-user-check text-3xl text-white"></i>
+      </div>
+      <h2 class="text-2xl font-extrabold text-white mb-2">¡Bienvenido!</h2>
+      <p class="text-slate-400 text-sm mb-6">Por favor ingresa tu nombre completo para acceder al sistema automático de Bryan.</p>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nombre Completo <span class="text-brand-500">*</span></label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="userNameInput" required placeholder="Ej: Pedro Martínez" class="w-full pl-11 pr-4 py-3.5 glass-input rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-4 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-slate-950 font-bold rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2 group cursor-pointer">
+          <span>Ingresar al Sistema</span>
+          <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-calendar-check text-slate-950 font-black text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
+            Sistema Bryan <span class="bg-brand-500/10 text-brand-400 text-xs px-2 py-0.5 rounded-full border border-brand-500/20 font-semibold">Auto</span>
+          </h1>
+          <p class="text-xs text-slate-400" id="liveClock"><i class="fa-regular fa-clock mr-1"></i> Cargando hora...</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div id="userBadge" class="hidden sm:flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
+          <i class="fa-solid fa-circle-user text-brand-400"></i>
+          <span id="badgeName" class="font-semibold text-slate-200"></span>
+          <button onclick="changeUser()" class="text-slate-400 hover:text-white ml-1 text-xs" title="Cambiar Nombre">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+        
+        <button onclick="toggleAdminPanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 transition-all flex items-center gap-2 shadow-sm cursor-pointer">
+          <i class="fa-solid fa-lock text-brand-400"></i>
+          <span>Panel Admin</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- HERO / BANNER PRINCIPAL -->
+    <section class="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-12 border border-slate-800 text-center sm:text-left">
+      <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-3xl space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+          <span>Disponible para nuevas consultas</span>
+        </div>
+        
+        <h2 id="welcomeHeading" class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
+          Bienvenido al sistema de <span class="bg-gradient-to-r from-brand-400 via-emerald-300 to-accent-400 bg-clip-text text-transparent">Bryan</span>
+        </h2>
+        
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Conecta, coordina y agenda tu cita en segundos. Completa los datos a continuación y nos pondremos en contacto contigo de inmediato.
+        </p>
+      </div>
+    </section>
+
+    <!-- FORMULARIO DE AGENDAMIENTO -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Lado Izquierdo: Resumen e Información -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6">
+          <h3 class="text-xl font-bold text-white flex items-center gap-3">
+            <i class="fa-solid fa-circle-info text-brand-400"></i>
+            <span>¿Cómo funciona?</span>
+          </h3>
+
+          <div class="space-y-4 text-sm">
+            <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 font-bold flex items-center justify-center shrink-0">1</div>
+              <div>
+                <h4 class="font-semibold text-white">Elige la fecha</h4>
+                <p class="text-slate-400 text-xs mt-0.5">Selecciona el día que prefieras para la reunión o consulta.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 font-bold flex items-center justify-center shrink-0">2</div>
+              <div>
+                <h4 class="font-semibold text-white">Selecciona la Categoría</h4>
+                <p class="text-slate-400 text-xs mt-0.5">Elige entre Duda / Pregunta, Ayuda / Soporte u Otro.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 font-bold flex items-center justify-center shrink-0">3</div>
+              <div>
+                <h4 class="font-semibold text-white">Explica para qué me necesitas</h4>
+                <p class="text-slate-400 text-xs mt-0.5">Cuéntame brevemente el motivo para estar preparado.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Formulario Principal -->
+      <div class="lg:col-span-7">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 relative">
+          <form id="bookingForm" onsubmit="handleBookingSubmit(event)" class="space-y-6">
+            <h3 class="text-2xl font-extrabold text-white flex items-center gap-3">
+              <i class="fa-regular fa-calendar-plus text-brand-400"></i>
+              <span>Agendar mi Cita</span>
+            </h3>
+
+            <!-- Fecha -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Fecha de Cita <span class="text-brand-500">*</span></label>
+              <div class="relative">
+                <i class="fa-regular fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="date" id="bookingDate" required class="w-full pl-11 pr-4 py-3.5 glass-input rounded-xl text-white focus:outline-none transition-all">
+              </div>
+            </div>
+
+            <!-- Categoría -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Categoría <span class="text-brand-500">*</span></label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="category" value="Duda / Pregunta" checked class="peer sr-only">
+                  <div class="p-4 rounded-xl border border-slate-700 bg-slate-900/50 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 peer-checked:text-brand-400 text-slate-400 hover:bg-slate-800 transition-all text-center">
+                    <i class="fa-solid fa-circle-question text-lg mb-1 block"></i>
+                    <span class="text-xs font-bold block">Duda / Pregunta</span>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="category" value="Ayuda / Soporte" class="peer sr-only">
+                  <div class="p-4 rounded-xl border border-slate-700 bg-slate-900/50 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 peer-checked:text-brand-400 text-slate-400 hover:bg-slate-800 transition-all text-center">
+                    <i class="fa-solid fa-headset text-lg mb-1 block"></i>
+                    <span class="text-xs font-bold block">Ayuda / Soporte</span>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="category" value="Otro" class="peer sr-only">
+                  <div class="p-4 rounded-xl border border-slate-700 bg-slate-900/50 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 peer-checked:text-brand-400 text-slate-400 hover:bg-slate-800 transition-all text-center">
+                    <i class="fa-solid fa-ellipsis text-lg mb-1 block"></i>
+                    <span class="text-xs font-bold block">Otro</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Correo y Teléfono -->
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  Correo Electrónico <span class="text-slate-500 font-normal lowercase">(opcional)</span>
+                </label>
+                <div class="relative">
+                  <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input type="email" id="userEmail" placeholder="ejemplo@correo.com" class="w-full pl-11 pr-4 py-3.5 glass-input rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Teléfono / WhatsApp <span class="text-brand-500">*</span></label>
+                <div class="relative">
+                  <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input type="tel" id="userPhone" required placeholder="+1 809-000-0000" class="w-full pl-11 pr-4 py-3.5 glass-input rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all">
+                </div>
+              </div>
+            </div>
+
+            <!-- Para qué me necesitas -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">¿Para qué me necesitas? <span class="text-brand-500">*</span></label>
+              <textarea id="userReason" required rows="4" placeholder="Explícame detalladamente en qué puedo ayudarte o de qué trata la cita..." class="w-full p-4 glass-input rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all resize-none"></textarea>
+            </div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" class="w-full py-4 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-slate-950 font-extrabold text-base rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span>Confirmar Cita Ahora</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL DE ADMINISTRACIÓN (OCULTO POR DEFECTO) -->
+    <section id="adminSection" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+        <div>
+          <h3 class="text-2xl font-black text-white flex items-center gap-3">
+            <i class="fa-solid fa-user-shield text-brand-400"></i>
+            <span>Panel de Control - Bryan</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Gestión completa de solicitudes y citas recibidas.</p>
+        </div>
+        <button onclick="closeAdminPanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all self-start sm:self-auto cursor-pointer">
+          <i class="fa-solid fa-xmark mr-1"></i> Cerrar Panel
+        </button>
+      </div>
+
+      <!-- Métricas -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold block mb-1">Total Citas</span>
+          <span id="statTotal" class="text-2xl font-black text-white">0</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold block mb-1">Pendientes</span>
+          <span id="statPending" class="text-2xl font-black text-amber-400">0</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold block mb-1">Confirmadas</span>
+          <span id="statConfirmed" class="text-2xl font-black text-brand-400">0</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold block mb-1">Canceladas</span>
+          <span id="statCancelled" class="text-2xl font-black text-rose-400">0</span>
+        </div>
+      </div>
+
+      <!-- Tabla de Citas -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-800 uppercase tracking-wider">
+              <th class="py-3 px-4">Fecha</th>
+              <th class="py-3 px-4">Cliente</th>
+              <th class="py-3 px-4">Categoría</th>
+              <th class="py-3 px-4">Teléfono</th>
+              <th class="py-3 px-4">Motivo / Razón</th>
+              <th class="py-3 px-4">Estado</th>
+              <th class="py-3 px-4 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="appointmentsTableBody" class="divide-y divide-slate-800/60">
+            <!-- Filas dinámicas -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CONTRASEÑA ADMIN -->
+  <div id="passwordModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-slate-800 text-center space-y-4">
+      <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto text-brand-400">
+        <i class="fa-solid fa-key text-xl"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white">Acceso Administrador</h3>
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <input type="password" id="adminPasswordInput" required placeholder="Ingresa la contraseña..." class="w-full p-3 glass-input rounded-xl text-center text-white focus:outline-none">
+        <div class="flex gap-2">
+          <button type="button" onclick="closePasswordModal()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold cursor-pointer">Cancelar</button>
+          <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-slate-950 rounded-xl text-xs font-bold cursor-pointer">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMACIÓN CITA -->
+  <div id="successModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full border border-slate-800 text-center space-y-6">
+      <div class="w-16 h-16 bg-brand-500/20 text-brand-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <h3 class="text-2xl font-extrabold text-white">¡Cita Registrada!</h3>
+        <p class="text-slate-400 text-xs mt-1">Tu solicitud ha sido guardada con éxito en el sistema de Bryan.</p>
+      </div>
+
+      <div id="modalSummary" class="text-left bg-slate-900/80 p-4 rounded-2xl border border-slate-800 text-xs space-y-2 text-slate-300">
+        <!-- Resumen dinámico -->
+      </div>
+
+      <button onclick="closeSuccessModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold rounded-xl text-xs cursor-pointer">
+        Entendido / Finalizar
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
+    <p>© 2026 Sistema Automático de Bryan. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- JAVASCRIPT LÓGICA COMPLETA -->
+  <script>
+    // Variables de Estado
+    let currentUserName = localStorage.getItem('bryan_user_name') || '';
+    let appointments = JSON.parse(localStorage.getItem('bryan_appointments')) || [];
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      initClock();
+      setMinDate();
+      checkUserSession();
+      renderAdminTable();
+    });
+
+    // Reloj en Tiempo Real
+    function initClock() {
+      const clockEl = document.getElementById('liveClock');
+      function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+        clockEl.innerHTML = `<i class="fa-regular fa-clock mr-1"></i>${now.toLocaleDateString('es-ES', options)}`;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    // Establecer fecha mínima en el input
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('bookingDate').min = today;
+      document.getElementById('bookingDate').value = today;
+    }
+
+    // Control de Sesión de Usuario
+    function checkUserSession() {
+      const loginModal = document.getElementById('loginModal');
+      const welcomeHeading = document.getElementById('welcomeHeading');
+      const userBadge = document.getElementById('userBadge');
+      const badgeName = document.getElementById('badgeName');
+
+      if (!currentUserName) {
+        loginModal.classList.remove('hidden');
+      } else {
+        loginModal.classList.add('hidden');
+        welcomeHeading.innerHTML = `Hola <span class="text-brand-400">${currentUserName}</span>, bienvenido al sistema automático de <span class="bg-gradient-to-r from-brand-400 via-emerald-300 to-accent-400 bg-clip-text text-transparent">Bryan</span> :)`;
+        userBadge.classList.remove('hidden');
+        badgeName.textContent = currentUserName;
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const input = document.getElementById('userNameInput').value.trim();
+      if (input) {
+        currentUserName = input;
+        localStorage.setItem('bryan_user_name', currentUserName);
+        checkUserSession();
+      }
+    }
+
+    function changeUser() {
+      localStorage.removeItem('bryan_user_name');
+      currentUserName = '';
+      checkUserSession();
+    }
+
+    // Manejo de Agendamiento
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      
+      const date = document.getElementById('bookingDate').value;
+      const category = document.querySelector('input[name="category"]:checked').value;
+      const email = document.getElementById('userEmail').value.trim();
+      const phone = document.getElementById('userPhone').value.trim();
+      const reason = document.getElementById('userReason').value.trim();
+
+      const newAppointment = {
+        id: Date.now(),
+        clientName: currentUserName,
+        date,
+        category,
+        email: email || 'No especificado',
+        phone,
+        reason,
+        status: 'Pendiente',
+        createdAt: new Date().toISOString()
+      };
+
+      appointments.push(newAppointment);
+      localStorage.setItem('bryan_appointments', JSON.stringify(appointments));
+
+      // Mostrar Resumen en Modal
+      document.getElementById('modalSummary').innerHTML = `
+        <p><strong>Cliente:</strong> ${newAppointment.clientName}</p>
+        <p><strong>Fecha:</strong> ${newAppointment.date}</p>
+        <p><strong>Categoría:</strong> ${newAppointment.category}</p>
+        <p><strong>Teléfono:</strong> ${newAppointment.phone}</p>
+        <p><strong>Motivo:</strong> ${newAppointment.reason}</p>
+      `;
+
+      document.getElementById('successModal').classList.remove('hidden');
+      document.getElementById('bookingForm').reset();
+      setMinDate();
+      renderAdminTable();
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('successModal').classList.add('hidden');
+    }
+
+    // PANEL DE ADMINISTRACIÓN Y SEGURIDAD
+    function toggleAdminPanel() {
+      const adminSec = document.getElementById('adminSection');
+      if (adminSec.classList.contains('hidden')) {
+        document.getElementById('passwordModal').classList.remove('hidden');
+      } else {
+        adminSec.classList.add('hidden');
+      }
+    }
+
+    function closePasswordModal() {
+      document.getElementById('passwordModal').classList.hidden = true;
+      document.getElementById('adminPasswordInput').value = '';
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('adminPasswordInput').value;
+      if (pass === '2020') {
+        closePasswordModal();
+        document.getElementById('adminSection').classList.remove('hidden');
+        renderAdminTable();
+        document.getElementById('adminSection').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        alert('Contraseña incorrecta.');
+      }
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminSection').classList.add('hidden');
+    }
+
+    // Renderizar Tabla Admin y Métricas
+    function renderAdminTable() {
+      const tbody = document.getElementById('appointmentsTableBody');
+      tbody.innerHTML = '';
+
+      let total = appointments.length;
+      let pending = 0;
+      let confirmed = 0;
+      let cancelled = 0;
+
+      appointments.forEach(app => {
+        if (app.status === 'Pendiente') pending++;
+        if (app.status === 'Confirmada') confirmed++;
+        if (app.status === 'Cancelada') cancelled++;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-900/50 transition-colors';
+        
+        let statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Pendiente</span>`;
+        if (app.status === 'Confirmada') statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20">Confirmada</span>`;
+        if (app.status === 'Cancelada') statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">Cancelada</span>`;
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 text-white font-medium">${app.date}</td>
+          <td class="py-3 px-4 text-slate-200 font-semibold">${app.clientName}</td>
+          <td class="py-3 px-4 text-slate-400">${app.category}</td>
+          <td class="py-3 px-4 text-brand-400 font-mono">${app.phone}</td>
+          <td class="py-3 px-4 text-slate-300 max-w-xs truncate" title="${app.reason}">${app.reason}</td>
+          <td class="py-3 px-4">${statusBadge}</td>
+          <td class="py-3 px-4 text-right space-x-1">
+            <button onclick="updateStatus(${app.id}, 'Confirmada')" class="p-1.5 bg-brand-500/10 text-brand-400 hover:bg-brand-500 hover:text-slate-950 rounded-lg transition-all" title="Confirmar"><i class="fa-solid fa-check"></i></button>
+            <button onclick="updateStatus(${app.id}, 'Cancelada')" class="p-1.5 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all" title="Cancelar"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="deleteAppointment(${app.id})" class="p-1.5 bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statPending').textContent = pending;
+      document.getElementById('statConfirmed').textContent = confirmed;
+      document.getElementById('statCancelled').textContent = cancelled;
+    }
+
+    function updateStatus(id, newStatus) {
+      appointments = appointments.map(app => app.id === id ? { ...app, status: newStatus } : app);
+      localStorage.setItem('bryan_appointments', JSON.stringify(appointments));
+      renderAdminTable();
+    }
+
+    function deleteAppointment(id) {
+      if (confirm('¿Deseas eliminar esta cita del registro?')) {
+        appointments = appointments.filter(app => app.id !== id);
+        localStorage.setItem('bryan_appointments', JSON.stringify(appointments));
+        renderAdminTable();
+      }
+    }
+  </script>
+</body>
+</html>
