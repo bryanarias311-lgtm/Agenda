@@ -345,7 +345,7 @@
               <h3 class="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
                 Panel de Organización <span class="bg-indigo-500/10 text-indigo-400 text-xs px-2.5 py-0.5 rounded-full border border-indigo-500/30 font-bold">Privado</span>
               </h3>
-              <p class="text-xs text-slate-400 mt-0.5">Gestión de Tareas, Estudios, Calificaciones y Horario.</p>
+              <p class="text-xs text-slate-400 mt-0.5">Gestión de Tareas, Profesores, Estudios, Notas y Notificaciones.</p>
             </div>
           </div>
           <button onclick="closeOrgPanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-2 self-start sm:self-auto">
@@ -356,19 +356,22 @@
         <!-- Pestañas de Organización -->
         <div class="flex border-b border-slate-800/80 space-x-2 overflow-x-auto pb-2">
           <button onclick="switchOrgTab('tasks')" id="tabTasksBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
-            <i class="fa-solid fa-list-check"></i> Tareas Pendientes
+            <i class="fa-solid fa-list-check"></i> Tareas
           </button>
           <button onclick="switchOrgTab('teachers')" id="tabTeachersBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs text-slate-400 hover:bg-slate-900 hover:text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
             <i class="fa-solid fa-chalkboard-user"></i> Profesores
           </button>
           <button onclick="switchOrgTab('studies')" id="tabStudiesBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs text-slate-400 hover:bg-slate-900 hover:text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
-            <i class="fa-solid fa-book-open"></i> Estudios y Proyectos
+            <i class="fa-solid fa-book-open"></i> Estudios
           </button>
           <button onclick="switchOrgTab('grades')" id="tabGradesBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs text-slate-400 hover:bg-slate-900 hover:text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
-            <i class="fa-solid fa-calculator"></i> Calculadora de Notas
+            <i class="fa-solid fa-calculator"></i> Notas
           </button>
           <button onclick="switchOrgTab('schedule')" id="tabScheduleBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs text-slate-400 hover:bg-slate-900 hover:text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
-            <i class="fa-solid fa-calendar-days"></i> Horario de Clase
+            <i class="fa-solid fa-calendar-days"></i> Horario IPLE
+          </button>
+          <button onclick="switchOrgTab('notifications')" id="tabNotificationsBtn" class="px-4 py-2.5 rounded-xl font-bold text-xs text-slate-400 hover:bg-slate-900 hover:text-white flex items-center gap-2 cursor-pointer transition-all shrink-0">
+            <i class="fa-solid fa-bell"></i> Notificaciones y Exposiciones
           </button>
         </div>
 
@@ -393,9 +396,7 @@
             </div>
           </form>
 
-          <div id="tasksList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Tareas dinámicas -->
-          </div>
+          <div id="tasksList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
         <!-- SUB-TAB 2: PROFESORES -->
@@ -411,30 +412,17 @@
             <div>
               <label class="block text-[11px] font-bold text-slate-400 mb-2">Días de Clase:</label>
               <div class="flex flex-wrap gap-2">
-                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300">
-                  <input type="checkbox" name="teacherDays" value="Lun" class="accent-indigo-500"> Lunes
-                </label>
-                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300">
-                  <input type="checkbox" name="teacherDays" value="Mar" class="accent-indigo-500"> Martes
-                </label>
-                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300">
-                  <input type="checkbox" name="teacherDays" value="Mié" class="accent-indigo-500"> Miércoles
-                </label>
-                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300">
-                  <input type="checkbox" name="teacherDays" value="Jue" class="accent-indigo-500"> Jueves
-                </label>
-                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300">
-                  <input type="checkbox" name="teacherDays" value="Vie" class="accent-indigo-500"> Viernes
-                </label>
+                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300"><input type="checkbox" name="teacherDays" value="Lun" class="accent-indigo-500"> Lunes</label>
+                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300"><input type="checkbox" name="teacherDays" value="Mar" class="accent-indigo-500"> Martes</label>
+                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300"><input type="checkbox" name="teacherDays" value="Mié" class="accent-indigo-500"> Miércoles</label>
+                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300"><input type="checkbox" name="teacherDays" value="Jue" class="accent-indigo-500"> Jueves</label>
+                <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs cursor-pointer text-slate-300"><input type="checkbox" name="teacherDays" value="Vie" class="accent-indigo-500"> Viernes</label>
               </div>
             </div>
-
             <button type="submit" class="w-full p-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs cursor-pointer">Guardar Profesor</button>
           </form>
 
-          <div id="teachersList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Profesores dinámicos -->
-          </div>
+          <div id="teachersList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
         <!-- SUB-TAB 3: ESTUDIOS -->
@@ -447,44 +435,36 @@
               <button type="submit" class="sm:col-span-2 p-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs cursor-pointer">Guardar</button>
             </div>
           </form>
-
-          <div id="studiesList" class="space-y-3">
-            <!-- Temas dinámicos -->
-          </div>
+          <div id="studiesList" class="space-y-3"></div>
         </div>
 
-        <!-- SUB-TAB 4: CALCULADORA DE NOTAS -->
+        <!-- SUB-TAB 4: NOTAS -->
         <div id="orgGradesTab" class="hidden space-y-6">
           <form onsubmit="handleAddGrade(event)" class="glass-card p-5 rounded-2xl border border-slate-800 space-y-4">
             <h4 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-calculator text-indigo-400"></i> Agregar Asignatura y Calificaciones</h4>
             <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
-              <input type="text" id="gradeSubject" required placeholder="Materia (ej: Física)..." class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
-              <input type="number" id="gradeP1" min="0" max="100" required placeholder="P1 (0-100)" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
-              <input type="number" id="gradeP2" min="0" max="100" required placeholder="P2 (0-100)" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
-              <input type="number" id="gradeP3" min="0" max="100" required placeholder="P3 (0-100)" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
-              <button type="submit" class="p-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs cursor-pointer">Calcular y Guardar</button>
+              <input type="text" id="gradeSubject" required placeholder="Materia..." class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
+              <input type="number" id="gradeP1" min="0" max="100" required placeholder="P1" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
+              <input type="number" id="gradeP2" min="0" max="100" required placeholder="P2" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
+              <input type="number" id="gradeP3" min="0" max="100" required placeholder="P3" class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
+              <button type="submit" class="p-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs cursor-pointer">Calcular</button>
             </div>
           </form>
-
-          <div id="gradesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Asignaturas calculadas -->
-          </div>
+          <div id="gradesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
-        <!-- SUB-TAB 5: HORARIO DE CLASES OFICIAL (IPLE 4to A-DDAI/INF) -->
+        <!-- SUB-TAB 5: HORARIO DE CLASES OFICIAL (IPLE) -->
         <div id="orgScheduleTab" class="hidden space-y-6">
           <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-4">
             <div class="text-center border-b border-slate-800 pb-4">
               <h4 class="text-base font-extrabold text-white">Instituto Politécnico La Esperanza (IPLE)</h4>
-              <p class="text-xs text-indigo-400 font-bold mt-0.5">4to - A-DDAI/INF · INFORMÁTICA / DESARROLLO Y ADMINISTRACIÓN DE APLICACIONES INFORMÁTICAS</p>
-              <span class="text-[10px] text-slate-400 block mt-1">2026-2027 — 4to de Secundaria | 40 Bloques Ocupados · 11 Docentes · 12 Asignaturas</span>
+              <p class="text-xs text-indigo-400 font-bold mt-0.5">4to - A-DDAI/INF · INFORMÁTICA</p>
             </div>
-
-            <!-- Tabla Responsiva del Horario Oficial -->
+            <!-- Tabla Horario -->
             <div class="overflow-x-auto rounded-xl border border-slate-800/80">
               <table class="w-full text-center text-xs">
                 <thead>
-                  <tr class="bg-indigo-950/80 text-indigo-200 border-b border-slate-800 font-bold uppercase tracking-wider">
+                  <tr class="bg-indigo-950/80 text-indigo-200 border-b border-slate-800 font-bold uppercase">
                     <th class="py-3 px-3 text-left">Horario</th>
                     <th class="py-3 px-3">Lunes</th>
                     <th class="py-3 px-3">Martes</th>
@@ -494,106 +474,46 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800/60 text-[11px]">
-                  <!-- BLOQUE 1 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">8:00 AM - 8:50 AM</td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">CÉSAR GARCÍA</span></td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">CIENCIAS DE LA NATURALEZA</strong><span class="text-[10px] text-indigo-400">MARÍA MENGÓ</span></td>
-                    <td class="p-2.5 bg-purple-500/10"><strong class="block text-white">CIENCIAS SOCIALES</strong><span class="text-[10px] text-indigo-400">JAZMÍN PARRA</span></td>
-                  </tr>
-                  <!-- BLOQUE 2 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">8:50 AM - 9:40 AM</td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">CÉSAR GARCÍA</span></td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">CIENCIAS DE LA NATURALEZA</strong><span class="text-[10px] text-indigo-400">MARÍA MENGÓ</span></td>
-                    <td class="p-2.5 bg-purple-500/10"><strong class="block text-white">CIENCIAS SOCIALES</strong><span class="text-[10px] text-indigo-400">JAZMÍN PARRA</span></td>
-                  </tr>
-                  <!-- RECESO MAÑANA -->
-                  <tr class="bg-amber-500/10 text-amber-400 font-bold">
-                    <td class="py-2 px-3 font-mono text-left">9:40 AM - 10:10 AM</td>
-                    <td colspan="5" class="py-2 uppercase tracking-widest text-center">☕ Receso ☕</td>
-                  </tr>
-                  <!-- BLOQUE 3 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">10:10 AM - 11:00 AM</td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">CIENCIAS DE LA NATURALEZA</strong><span class="text-[10px] text-indigo-400">MARÍA MENGÓ</span></td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                    <td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">DANIEL SÁNCHEZ</span></td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                  </tr>
-                  <!-- BLOQUE 4 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">11:00 AM - 11:50 AM</td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                    <td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">DANIEL SÁNCHEZ</span></td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                  </tr>
-                  <!-- ALMUERZO -->
-                  <tr class="bg-indigo-900/40 text-indigo-300 font-bold">
-                    <td class="py-2.5 px-3 font-mono text-left">11:50 AM - 12:40 PM</td>
-                    <td colspan="5" class="py-2.5 uppercase tracking-widest text-center">🍱 Almuerzo 🍱</td>
-                  </tr>
-                  <!-- BLOQUE 5 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">12:40 PM - 1:30 PM</td>
-                    <td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">SANTA VÁSQUEZ</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">EDUCACIÓN FÍSICA</strong><span class="text-[10px] text-indigo-400">JOSÉ PEÑA</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">CÉSAR GARCÍA</span></td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">DANIEL SÁNCHEZ</span></td>
-                  </tr>
-                  <!-- BLOQUE 6 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">1:30 PM - 2:15 PM</td>
-                    <td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">SANTA VÁSQUEZ</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">FORMACIÓN INTEGRAL, HUMANA Y RELIGIOSA</strong><span class="text-[10px] text-indigo-400">BIENVENIDO ALONSO</span></td>
-                    <td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">SANTA VÁSQUEZ</span></td>
-                    <td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS Y DISEÑO DE SISTEMAS INFORMÁTICOS</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">DANIEL SÁNCHEZ</span></td>
-                  </tr>
-                  <!-- RECESO TARDE -->
-                  <tr class="bg-amber-500/10 text-amber-400 font-bold">
-                    <td class="py-2 px-3 font-mono text-left">2:15 PM - 2:30 PM</td>
-                    <td colspan="5" class="py-2 uppercase tracking-widest text-center">☕ Receso ☕</td>
-                  </tr>
-                  <!-- BLOQUE 7 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">2:30 PM - 3:15 PM</td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                    <td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                    <td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                  </tr>
-                  <!-- BLOQUE 8 -->
-                  <tr class="hover:bg-slate-900/50">
-                    <td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">3:15 PM - 4:00 PM</td>
-                    <td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">DISEÑO DE PORTALES WEB Y RECURSOS MULTIMEDIA</strong><span class="text-[10px] text-indigo-400">GÉNESIS ALBERTO SERRANO</span></td>
-                    <td class="p-2.5 bg-slate-900/40"><strong class="block text-white">EDUCACIÓN ARTÍSTICA</strong><span class="text-[10px] text-indigo-400">ARISMENDY ESPINAL</span></td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                    <td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">WILLIAMS MANUEL OSORIA DISLA</span></td>
-                    <td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">DISEÑO Y DESARROLLO DE BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">JOSÉ DANIEL SMITH</span></td>
-                  </tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">8:00 AM - 8:50 AM</td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">César García</span></td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">NATURALES</strong><span class="text-[10px] text-indigo-400">María Mengó</span></td><td class="p-2.5 bg-purple-500/10"><strong class="block text-white">SOCIALES</strong><span class="text-[10px] text-indigo-400">Jazmín Parra</span></td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">8:50 AM - 9:40 AM</td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">César García</span></td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">NATURALES</strong><span class="text-[10px] text-indigo-400">María Mengó</span></td><td class="p-2.5 bg-purple-500/10"><strong class="block text-white">SOCIALES</strong><span class="text-[10px] text-indigo-400">Jazmín Parra</span></td></tr>
+                  <tr class="bg-amber-500/10 text-amber-400 font-bold"><td class="py-2 px-3 font-mono text-left">9:40 AM - 10:10 AM</td><td colspan="5" class="py-2 uppercase tracking-widest text-center">☕ Receso ☕</td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">10:10 AM - 11:00 AM</td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">NATURALES</strong><span class="text-[10px] text-indigo-400">María Mengó</span></td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td><td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">Daniel Sánchez</span></td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">11:00 AM - 11:50 AM</td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td><td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">Daniel Sánchez</span></td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td></tr>
+                  <tr class="bg-indigo-900/40 text-indigo-300 font-bold"><td class="py-2.5 px-3 font-mono text-left">11:50 AM - 12:40 PM</td><td colspan="5" class="py-2.5 uppercase tracking-widest text-center">🍱 Almuerzo 🍱</td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">12:40 PM - 1:30 PM</td><td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">Santa Vásquez</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">EDUCACIÓN FÍSICA</strong><span class="text-[10px] text-indigo-400">José Peña</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">MATEMÁTICA</strong><span class="text-[10px] text-indigo-400">César García</span></td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">Daniel Sánchez</span></td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">1:30 PM - 2:15 PM</td><td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">Santa Vásquez</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">RELIGIÓN</strong><span class="text-[10px] text-indigo-400">Bienvenido Alonso</span></td><td class="p-2.5 bg-rose-500/10"><strong class="block text-white">LENGUA ESPAÑOLA</strong><span class="text-[10px] text-indigo-400">Santa Vásquez</span></td><td class="p-2.5 bg-blue-500/10"><strong class="block text-white">ANÁLISIS DE SISTEMAS</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-amber-500/10"><strong class="block text-white">INGLÉS TÉCNICO</strong><span class="text-[10px] text-indigo-400">Daniel Sánchez</span></td></tr>
+                  <tr class="bg-amber-500/10 text-amber-400 font-bold"><td class="py-2 px-3 font-mono text-left">2:15 PM - 2:30 PM</td><td colspan="5" class="py-2 uppercase tracking-widest text-center">☕ Receso ☕</td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">2:30 PM - 3:15 PM</td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td><td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td><td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td></tr>
+                  <tr class="hover:bg-slate-900/50"><td class="py-3 px-3 font-mono font-bold text-slate-300 text-left bg-slate-900/60">3:15 PM - 4:00 PM</td><td class="p-2.5 bg-cyan-500/10"><strong class="block text-white">PORTALES WEB</strong><span class="text-[10px] text-indigo-400">Génesis Serrano</span></td><td class="p-2.5 bg-slate-900/40"><strong class="block text-white">EDUCACIÓN ARTÍSTICA</strong><span class="text-[10px] text-indigo-400">Arismendy Espinal</span></td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td><td class="p-2.5 bg-indigo-500/10"><strong class="block text-white">TECNOLOGÍAS DIGITALES</strong><span class="text-[10px] text-indigo-400">Williams Osoria</span></td><td class="p-2.5 bg-emerald-500/10"><strong class="block text-white">BASE DE DATOS</strong><span class="text-[10px] text-indigo-400">José Daniel Smith</span></td></tr>
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
 
-            <!-- Resumen Informativo inferior del Horario -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-[10px] text-slate-400 pt-3 border-t border-slate-800">
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Base de Datos (7h):</strong> José Daniel Smith</div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Portales Web (6h):</strong> Génesis Alberto Serrano</div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Análisis de Sistemas (5h):</strong> Williams Manuel Osoria</div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Inglés Técnico (4h):</strong> Daniel Sánchez</div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Matemática (3h):</strong> César García</div>
-              <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800"><strong class="text-white block mb-0.5">Lengua Española (3h):</strong> Santa Vásquez</div>
+        <!-- SUB-TAB 6: NOTIFICACIONES Y EXPOSICIONES (CON CUENTA REGRESIVA) -->
+        <div id="orgNotificationsTab" class="hidden space-y-6">
+          <form onsubmit="handleAddNotification(event)" class="glass-card p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-bullhorn text-indigo-400"></i> Registrar Exposición, Tarea o Entrega Importante</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="notifTitle" required placeholder="Título (ej: Exposición de Base de Datos)..." class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
+              <input type="text" id="notifSubject" required placeholder="Materia / Profesor..." class="p-3 glass-input rounded-xl text-xs text-white focus:outline-none">
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Fecha y Hora de la Exposición / Entrega:</label>
+                <input type="datetime-local" id="notifDatetime" required class="w-full p-3 glass-input rounded-xl text-xs text-white focus:outline-none cursor-pointer">
+              </div>
+              <div class="flex items-end">
+                <button type="submit" class="w-full p-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs cursor-pointer flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-clock"></i> Activar Cuenta Regresiva y Alerta
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div id="notificationsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Exposiciones y cuentas regresivas dinámicas -->
           </div>
         </div>
       </section>
@@ -635,39 +555,28 @@
               <span class="text-slate-400 text-xs font-medium block">Total Citas</span>
               <span id="statTotal" class="text-3xl font-black text-white mt-1 block">0</span>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-lg">
-              <i class="fa-solid fa-layer-group"></i>
-            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-lg"><i class="fa-solid fa-layer-group"></i></div>
           </div>
-
           <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
             <div>
               <span class="text-slate-400 text-xs font-medium block">Pendientes</span>
               <span id="statPending" class="text-3xl font-black text-amber-400 mt-1 block">0</span>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
-              <i class="fa-solid fa-clock-rotate-left"></i>
-            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg"><i class="fa-solid fa-clock-rotate-left"></i></div>
           </div>
-
           <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
             <div>
               <span class="text-slate-400 text-xs font-medium block">Confirmadas</span>
               <span id="statConfirmed" class="text-3xl font-black text-emerald-400 mt-1 block">0</span>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
-              <i class="fa-solid fa-circle-check"></i>
-            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-circle-check"></i></div>
           </div>
-
           <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
             <div>
               <span class="text-slate-400 text-xs font-medium block">Canceladas</span>
               <span id="statCancelled" class="text-3xl font-black text-rose-400 mt-1 block">0</span>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
-              <i class="fa-solid fa-circle-xmark"></i>
-            </div>
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-lg"><i class="fa-solid fa-circle-xmark"></i></div>
           </div>
         </div>
 
@@ -684,9 +593,7 @@
                 <th class="py-4 px-5 text-right">Acciones</th>
               </tr>
             </thead>
-            <tbody id="appointmentsTableBody" class="divide-y divide-slate-800/60">
-              <!-- Filas dinámicas -->
-            </tbody>
+            <tbody id="appointmentsTableBody" class="divide-y divide-slate-800/60"></tbody>
           </table>
         </div>
       </section>
@@ -697,9 +604,7 @@
   <!-- MODAL DE CONTRASEÑA DE ACCESO PRIVADO (CLAVE: 2020) -->
   <div id="passwordModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-slate-800 text-center space-y-4 shadow-2xl">
-      <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto text-brand-400 shadow-md">
-        <i class="fa-solid fa-key text-xl"></i>
-      </div>
+      <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto text-brand-400 shadow-md"><i class="fa-solid fa-key text-xl"></i></div>
       <h3 class="text-lg font-bold text-white" id="passwordModalTitle">Acceso Privado</h3>
       <form onsubmit="handlePrivateLogin(event)" class="space-y-4">
         <input type="password" id="adminPasswordInput" required placeholder="Ingresa la contraseña..." class="w-full p-3 glass-input rounded-xl text-center text-white focus:outline-none text-xs">
@@ -714,21 +619,13 @@
   <!-- MODAL CONFIRMACIÓN CITA -->
   <div id="successModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl p-8 max-w-md w-full border border-slate-800 text-center space-y-6">
-      <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">
-        <i class="fa-solid fa-circle-check"></i>
-      </div>
+      <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl"><i class="fa-solid fa-circle-check"></i></div>
       <div>
         <h3 class="text-2xl font-extrabold text-white">¡Cita Registrada!</h3>
         <p class="text-slate-400 text-xs mt-1">Tu solicitud ha sido guardada en la nube con éxito.</p>
       </div>
-
-      <div id="modalSummary" class="text-left bg-slate-900/80 p-4 rounded-2xl border border-slate-800 text-xs space-y-2 text-slate-300">
-        <!-- Resumen -->
-      </div>
-
-      <button onclick="closeSuccessModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl text-xs cursor-pointer">
-        Entendido / Finalizar
-      </button>
+      <div id="modalSummary" class="text-left bg-slate-900/80 p-4 rounded-2xl border border-slate-800 text-xs space-y-2 text-slate-300"></div>
+      <button onclick="closeSuccessModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl text-xs cursor-pointer">Entendido / Finalizar</button>
     </div>
   </div>
 
@@ -760,8 +657,10 @@
     window.teachersList = [];
     window.studiesList = [];
     window.gradesList = [];
+    window.notificationsList = [];
     window.targetTargetSection = 'admin';
     let isFirstLoad = true;
+    let countdownInterval = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
@@ -770,9 +669,11 @@
       setupRealtimeListener();
       setupOrgListeners();
       loadSavedTheme();
+      
+      // Iniciar el loop de actualización de la cuenta regresiva cada segundo
+      countdownInterval = setInterval(updateCountdowns, 1000);
     });
 
-    // SISTEMA DE TEMAS
     window.setTheme = function(themeName) {
       document.documentElement.setAttribute('data-theme', themeName);
       localStorage.setItem('bryan_theme', themeName);
@@ -788,16 +689,13 @@
         alert("No hay citas registradas para exportar.");
         return;
       }
-
       let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
       csvContent += "Fecha,Cliente,Categoria,Telefono,Motivo,Estado\n";
-
       window.appointmentsList.forEach(app => {
         const cleanReason = `"${(app.reason || '').replace(/"/g, '""')}"`;
         const cleanName = `"${(app.clientName || '').replace(/"/g, '""')}"`;
         csvContent += `${app.date},${cleanName},${app.category},${app.phone},${cleanReason},${app.status}\n`;
       });
-
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
@@ -826,7 +724,6 @@
     function initClock() {
       const clockEl = document.getElementById('digitalClock');
       const dateEl = document.getElementById('dateLabel');
-      
       function update() {
         const now = new Date();
         clockEl.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
@@ -849,7 +746,6 @@
       const loginModal = document.getElementById('loginModal');
       const welcomeHeading = document.getElementById('welcomeHeading');
       const sidebarName = document.getElementById('sidebarUserName');
-
       if (!window.currentUserName) {
         loginModal.classList.remove('hidden');
       } else {
@@ -903,26 +799,16 @@
       }
     }
 
-    window.closeAdminPanel = function() {
-      document.getElementById('adminSection').classList.add('hidden');
-    }
-
-    window.closeOrgPanel = function() {
-      document.getElementById('orgSection').classList.add('hidden');
-    }
+    window.closeAdminPanel = function() { document.getElementById('adminSection').classList.add('hidden'); }
+    window.closeOrgPanel = function() { document.getElementById('orgSection').classList.add('hidden'); }
 
     function setupRealtimeListener() {
       const q = query(collection(db, "citas"));
       onSnapshot(q, (snapshot) => {
         const previousCount = window.appointmentsList.length;
         window.appointmentsList = [];
-        snapshot.forEach((docSnap) => {
-          window.appointmentsList.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        
-        if (!isFirstLoad && window.appointmentsList.length > previousCount) {
-          playCyberNotification();
-        }
+        snapshot.forEach((docSnap) => { window.appointmentsList.push({ id: docSnap.id, ...docSnap.data() }); });
+        if (!isFirstLoad && window.appointmentsList.length > previousCount) { playCyberNotification(); }
         isFirstLoad = false;
         renderAdminTable();
       });
@@ -933,85 +819,45 @@
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Guardando...`;
-
       const date = document.getElementById('bookingDate').value;
       const category = document.querySelector('input[name="category"]:checked').value;
       const email = document.getElementById('userEmail').value.trim();
       const phone = document.getElementById('userPhone').value.trim();
       const reason = document.getElementById('userReason').value.trim();
-
-      const newAppointment = {
-        clientName: window.currentUserName,
-        date,
-        category,
-        email: email || 'No especificado',
-        phone,
-        reason,
-        status: 'Pendiente',
-        createdAt: new Date().toISOString()
-      };
-
+      const newAppointment = { clientName: window.currentUserName, date, category, email: email || 'No especificado', phone, reason, status: 'Pendiente', createdAt: new Date().toISOString() };
       try {
         await addDoc(collection(db, "citas"), newAppointment);
-        document.getElementById('modalSummary').innerHTML = `
-          <p><strong>Cliente:</strong> ${newAppointment.clientName}</p>
-          <p><strong>Fecha:</strong> ${newAppointment.date}</p>
-          <p><strong>Categoría:</strong> ${newAppointment.category}</p>
-          <p><strong>Teléfono:</strong> ${newAppointment.phone}</p>
-          <p><strong>Motivo:</strong> ${newAppointment.reason}</p>
-        `;
+        document.getElementById('modalSummary').innerHTML = `<p><strong>Cliente:</strong> ${newAppointment.clientName}</p><p><strong>Fecha:</strong> ${newAppointment.date}</p><p><strong>Categoría:</strong> ${newAppointment.category}</p><p><strong>Teléfono:</strong> ${newAppointment.phone}</p><p><strong>Motivo:</strong> ${newAppointment.reason}</p>`;
         document.getElementById('successModal').classList.remove('hidden');
         document.getElementById('bookingForm').reset();
         setMinDate();
-      } catch (error) {
-        alert("Hubo un error al registrar la cita.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>Agendar cita</span>`;
-      }
+      } catch (error) { alert("Hubo un error al registrar la cita."); }
+      finally { submitBtn.disabled = false; submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>Agendar cita</span>`; }
     }
 
-    window.closeSuccessModal = function() {
-      document.getElementById('successModal').classList.add('hidden');
-    }
+    window.closeSuccessModal = function() { document.getElementById('successModal').classList.add('hidden'); }
 
     function renderAdminTable() {
       const tbody = document.getElementById('appointmentsTableBody');
       if(!tbody) return;
       tbody.innerHTML = '';
-
-      let total = window.appointmentsList.length;
-      let pending = 0, confirmed = 0, cancelled = 0;
-
+      let total = window.appointmentsList.length, pending = 0, confirmed = 0, cancelled = 0;
       window.appointmentsList.forEach(app => {
         if (app.status === 'Pendiente') pending++;
         if (app.status === 'Confirmada') confirmed++;
         if (app.status === 'Cancelada') cancelled++;
-
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-800/40 transition-colors border-b border-slate-800/60';
-        
-        let statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Pendiente</span>`;
-        if (app.status === 'Confirmada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-check text-[9px]"></i> Confirmada</span>`;
-        if (app.status === 'Cancelada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20"><i class="fa-solid fa-xmark text-[9px]"></i> Cancelada</span>`;
-
+        let statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Pendiente</span>`;
+        if (app.status === 'Confirmada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25"><i class="fa-solid fa-check text-[9px]"></i> Confirmada</span>`;
+        if (app.status === 'Cancelada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/25"><i class="fa-solid fa-xmark text-[9px]"></i> Cancelada</span>`;
         const cleanPhone = app.phone.replace(/[^0-9]/g, '');
         const initial = app.clientName ? app.clientName.charAt(0).toUpperCase() : 'C';
-
         tr.innerHTML = `
           <td class="py-4 px-5 text-white font-medium flex items-center gap-2"><i class="fa-regular fa-calendar text-brand-400"></i> ${app.date}</td>
-          <td class="py-4 px-5">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-500 to-indigo-600 font-bold text-white flex items-center justify-center text-xs shadow-sm">${initial}</div>
-              <span class="text-slate-100 font-semibold">${app.clientName}</span>
-            </div>
-          </td>
+          <td class="py-4 px-5"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-500 to-indigo-600 font-bold text-white flex items-center justify-center text-xs shadow-sm">${initial}</div><span class="text-slate-100 font-semibold">${app.clientName}</span></div></td>
           <td class="py-4 px-5 text-slate-300 font-medium">${app.category}</td>
-          <td class="py-4 px-5">
-            <a href="https://wa.me/${cleanPhone}" target="_blank" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-mono transition-all">
-              <i class="fa-brands fa-whatsapp text-sm"></i> ${app.phone}
-            </a>
-          </td>
+          <td class="py-4 px-5"><a href="https://wa.me/${cleanPhone}" target="_blank" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-mono transition-all"><i class="fa-brands fa-whatsapp text-sm"></i> ${app.phone}</a></td>
           <td class="py-4 px-5 text-slate-300 max-w-xs truncate" title="${app.reason}">${app.reason}</td>
           <td class="py-4 px-5">${statusBadge}</td>
           <td class="py-4 px-5 text-right space-x-1.5">
@@ -1022,7 +868,6 @@
         `;
         tbody.appendChild(tr);
       });
-
       document.getElementById('statTotal').textContent = total;
       document.getElementById('statPending').textContent = pending;
       document.getElementById('statConfirmed').textContent = confirmed;
@@ -1031,48 +876,22 @@
 
     window.filterAdminTable = function() {
       const queryStr = document.getElementById('adminSearchInput').value.toLowerCase();
-      document.querySelectorAll('#appointmentsTableBody tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(queryStr) ? '' : 'none';
-      });
+      document.querySelectorAll('#appointmentsTableBody tr').forEach(row => { row.style.display = row.textContent.toLowerCase().includes(queryStr) ? '' : 'none'; });
     }
 
-    window.updateStatus = async function(id, newStatus) {
-      await updateDoc(doc(db, "citas", id), { status: newStatus });
-    }
-
-    window.deleteAppointment = async function(id) {
-      if (confirm('¿Deseas eliminar esta cita?')) await deleteDoc(doc(db, "citas", id));
-    }
+    window.updateStatus = async function(id, newStatus) { await updateDoc(doc(db, "citas", id), { status: newStatus }); }
+    window.deleteAppointment = async function(id) { if (confirm('¿Deseas eliminar esta cita?')) await deleteDoc(doc(db, "citas", id)); }
 
     function setupOrgListeners() {
-      onSnapshot(query(collection(db, "tareas")), (snapshot) => {
-        window.tasksList = [];
-        snapshot.forEach(docSnap => window.tasksList.push({ id: docSnap.id, ...docSnap.data() }));
-        renderTasks();
-      });
-
-      onSnapshot(query(collection(db, "profesores")), (snapshot) => {
-        window.teachersList = [];
-        snapshot.forEach(docSnap => window.teachersList.push({ id: docSnap.id, ...docSnap.data() }));
-        renderTeachers();
-        updateTaskTeacherSelect();
-      });
-
-      onSnapshot(query(collection(db, "estudios")), (snapshot) => {
-        window.studiesList = [];
-        snapshot.forEach(docSnap => window.studiesList.push({ id: docSnap.id, ...docSnap.data() }));
-        renderStudies();
-      });
-
-      onSnapshot(query(collection(db, "notas")), (snapshot) => {
-        window.gradesList = [];
-        snapshot.forEach(docSnap => window.gradesList.push({ id: docSnap.id, ...docSnap.data() }));
-        renderGrades();
-      });
+      onSnapshot(query(collection(db, "tareas")), (snapshot) => { window.tasksList = []; snapshot.forEach(docSnap => window.tasksList.push({ id: docSnap.id, ...docSnap.data() })); renderTasks(); });
+      onSnapshot(query(collection(db, "profesores")), (snapshot) => { window.teachersList = []; snapshot.forEach(docSnap => window.teachersList.push({ id: docSnap.id, ...docSnap.data() })); renderTeachers(); updateTaskTeacherSelect(); });
+      onSnapshot(query(collection(db, "estudios")), (snapshot) => { window.studiesList = []; snapshot.forEach(docSnap => window.studiesList.push({ id: docSnap.id, ...docSnap.data() })); renderStudies(); });
+      onSnapshot(query(collection(db, "notas")), (snapshot) => { window.gradesList = []; snapshot.forEach(docSnap => window.gradesList.push({ id: docSnap.id, ...docSnap.data() })); renderGrades(); });
+      onSnapshot(query(collection(db, "notificaciones")), (snapshot) => { window.notificationsList = []; snapshot.forEach(docSnap => window.notificationsList.push({ id: docSnap.id, ...docSnap.data() })); renderNotifications(); });
     }
 
     window.switchOrgTab = function(tab) {
-      ['tasks', 'teachers', 'studies', 'grades', 'schedule'].forEach(t => {
+      ['tasks', 'teachers', 'studies', 'grades', 'schedule', 'notifications'].forEach(t => {
         const tabEl = document.getElementById(`org${t.charAt(0).toUpperCase() + t.slice(1)}Tab`);
         const btnEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`);
         if (t === tab) {
@@ -1093,7 +912,6 @@
       const p2 = parseFloat(document.getElementById('gradeP2').value);
       const p3 = parseFloat(document.getElementById('gradeP3').value);
       const avg = Math.round((p1 + p2 + p3) / 3);
-
       await addDoc(collection(db, "notas"), { subject, p1, p2, p3, avg, createdAt: new Date().toISOString() });
       e.target.reset();
     }
@@ -1102,33 +920,19 @@
       const container = document.getElementById('gradesList');
       if(!container) return;
       container.innerHTML = '';
-
       window.gradesList.forEach(g => {
         const isPassed = g.avg >= 70;
         const div = document.createElement('div');
         div.className = 'p-4 rounded-2xl glass-card border border-slate-800 space-y-2 relative';
         div.innerHTML = `
-          <div class="flex items-center justify-between">
-            <h5 class="font-bold text-xs text-white">${g.subject}</h5>
-            <button onclick="deleteGrade('${g.id}')" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-          <div class="flex items-center gap-2 text-[10px] text-slate-400">
-            <span>P1: <strong class="text-white">${g.p1}</strong></span>
-            <span>P2: <strong class="text-white">${g.p2}</strong></span>
-            <span>P3: <strong class="text-white">${g.p3}</strong></span>
-          </div>
-          <div class="flex items-center justify-between border-t border-slate-800/80 pt-2">
-            <span class="text-[10px] font-bold uppercase text-slate-400">Promedio:</span>
-            <span class="text-sm font-black ${isPassed ? 'text-emerald-400' : 'text-rose-400'}">${g.avg} / 100 ${isPassed ? '✅' : '⚠️'}</span>
-          </div>
+          <div class="flex items-center justify-between"><h5 class="font-bold text-xs text-white">${g.subject}</h5><button onclick="deleteGrade('${g.id}')" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>
+          <div class="flex items-center gap-2 text-[10px] text-slate-400"><span>P1: <strong class="text-white">${g.p1}</strong></span><span>P2: <strong class="text-white">${g.p2}</strong></span><span>P3: <strong class="text-white">${g.p3}</strong></span></div>
+          <div class="flex items-center justify-between border-t border-slate-800/80 pt-2"><span class="text-[10px] font-bold uppercase text-slate-400">Promedio:</span><span class="text-sm font-black ${isPassed ? 'text-emerald-400' : 'text-rose-400'}">${g.avg} / 100 ${isPassed ? '✅' : '⚠️'}</span></div>
         `;
         container.appendChild(div);
       });
     }
-
-    window.deleteGrade = async function(id) {
-      if (confirm('¿Eliminar registro de nota?')) await deleteDoc(doc(db, "notas", id));
-    }
+    window.deleteGrade = async function(id) { if (confirm('¿Eliminar registro de nota?')) await deleteDoc(doc(db, "notas", id)); }
 
     // TAREAS
     window.handleAddTask = async function(e) {
@@ -1137,10 +941,7 @@
       const teacher = document.getElementById('taskTeacher').value;
       const priority = document.getElementById('taskPriority').value;
       const desc = document.getElementById('taskDesc').value.trim();
-
-      await addDoc(collection(db, "tareas"), {
-        title, teacher: teacher || 'Ninguno', priority, desc, completed: false, createdAt: new Date().toISOString()
-      });
+      await addDoc(collection(db, "tareas"), { title, teacher: teacher || 'Ninguno', priority, desc, completed: false, createdAt: new Date().toISOString() });
       e.target.reset();
     }
 
@@ -1148,38 +949,21 @@
       const container = document.getElementById('tasksList');
       if(!container) return;
       container.innerHTML = '';
-
       window.tasksList.forEach(t => {
         let pColor = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
         if (t.priority === 'Alta') pColor = 'text-rose-400 bg-rose-500/10 border-rose-500/20';
         if (t.priority === 'Media') pColor = 'text-amber-400 bg-amber-500/10 border-amber-500/20';
-
         const div = document.createElement('div');
         div.className = `p-4 rounded-2xl glass-card border border-slate-800 flex items-start justify-between gap-3 ${t.completed ? 'opacity-50 line-through' : ''}`;
         div.innerHTML = `
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="font-bold text-xs text-white">${t.title}</span>
-              <span class="px-2 py-0.5 rounded-md text-[9px] font-bold border ${pColor}">${t.priority}</span>
-            </div>
-            <p class="text-[11px] text-slate-400">${t.desc || 'Sin descripción'}</p>
-            <p class="text-[10px] text-indigo-400 font-semibold"><i class="fa-solid fa-chalkboard-user"></i> Prof: ${t.teacher}</p>
-          </div>
-          <div class="flex items-center gap-1 shrink-0">
-            <button onclick="toggleTask('${t.id}', ${!t.completed})" class="p-2 bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white rounded-xl text-xs transition-all" title="Completar"><i class="fa-solid fa-check"></i></button>
-            <button onclick="deleteTask('${t.id}')" class="p-2 bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white rounded-xl text-xs transition-all" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-          </div>
+          <div class="space-y-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-xs text-white">${t.title}</span><span class="px-2 py-0.5 rounded-md text-[9px] font-bold border ${pColor}">${t.priority}</span></div><p class="text-[11px] text-slate-400">${t.desc || 'Sin descripción'}</p><p class="text-[10px] text-indigo-400 font-semibold"><i class="fa-solid fa-chalkboard-user"></i> Prof: ${t.teacher}</p></div>
+          <div class="flex items-center gap-1 shrink-0"><button onclick="toggleTask('${t.id}', ${!t.completed})" class="p-2 bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white rounded-xl text-xs transition-all" title="Completar"><i class="fa-solid fa-check"></i></button><button onclick="deleteTask('${t.id}')" class="p-2 bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white rounded-xl text-xs transition-all" title="Eliminar"><i class="fa-solid fa-trash"></i></button></div>
         `;
         container.appendChild(div);
       });
     }
-
-    window.toggleTask = async function(id, status) {
-      await updateDoc(doc(db, "tareas", id), { completed: status });
-    }
-    window.deleteTask = async function(id) {
-      if (confirm('¿Eliminar tarea?')) await deleteDoc(doc(db, "tareas", id));
-    }
+    window.toggleTask = async function(id, status) { await updateDoc(doc(db, "tareas", id), { completed: status }); }
+    window.deleteTask = async function(id) { if (confirm('¿Eliminar tarea?')) await deleteDoc(doc(db, "tareas", id)); }
 
     // PROFESORES
     window.handleAddTeacher = async function(e) {
@@ -1188,10 +972,7 @@
       const subject = document.getElementById('teacherSubject').value.trim();
       const hours = document.getElementById('teacherHours').value;
       const checkedDays = Array.from(document.querySelectorAll('input[name="teacherDays"]:checked')).map(cb => cb.value);
-
-      await addDoc(collection(db, "profesores"), {
-        name, subject, hours: hours || '1', days: checkedDays.length > 0 ? checkedDays : ['Por definir']
-      });
+      await addDoc(collection(db, "profesores"), { name, subject, hours: hours || '1', days: checkedDays.length > 0 ? checkedDays : ['Por definir'] });
       e.target.reset();
     }
 
@@ -1199,28 +980,15 @@
       const container = document.getElementById('teachersList');
       if(!container) return;
       container.innerHTML = '';
-
       window.teachersList.forEach(p => {
         const daysBadges = (p.days || []).map(d => `<span class="bg-slate-800 text-slate-300 text-[9px] px-1.5 py-0.5 rounded font-mono">${d}</span>`).join(' ');
-
         const div = document.createElement('div');
         div.className = 'p-4 rounded-2xl glass-card border border-slate-800 space-y-2.5 relative';
         div.innerHTML = `
-          <div class="flex items-center justify-between">
-            <h5 class="font-bold text-xs text-white">${p.name}</h5>
-            <button onclick="deleteTeacher('${p.id}')" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-semibold">${p.subject}</span>
-            <span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20"><i class="fa-regular fa-clock"></i> ${p.hours || 1}h / sem</span>
-          </div>
-          <div class="flex items-center gap-1 border-t border-slate-800/80 pt-2">
-            <span class="text-[10px] text-slate-400 font-medium">Días:</span>
-            <div class="flex flex-wrap gap-1">${daysBadges}</div>
-          </div>
-          <button onclick="quickAssignTask('${p.name}')" class="w-full mt-1 py-2 bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white rounded-xl text-[10px] font-bold transition-all cursor-pointer">
-            + Asignar Tarea
-          </button>
+          <div class="flex items-center justify-between"><h5 class="font-bold text-xs text-white">${p.name}</h5><button onclick="deleteTeacher('${p.id}')" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>
+          <div class="flex items-center justify-between gap-2"><span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-semibold">${p.subject}</span><span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20"><i class="fa-regular fa-clock"></i> ${p.hours || 1}h / sem</span></div>
+          <div class="flex items-center gap-1 border-t border-slate-800/80 pt-2"><span class="text-[10px] text-slate-400 font-medium">Días:</span><div class="flex flex-wrap gap-1">${daysBadges}</div></div>
+          <button onclick="quickAssignTask('${p.name}')" class="w-full mt-1 py-2 bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white rounded-xl text-[10px] font-bold transition-all cursor-pointer">+ Asignar Tarea</button>
         `;
         container.appendChild(div);
       });
@@ -1243,43 +1011,130 @@
       document.getElementById('taskTeacher').value = teacherName;
       document.getElementById('taskTitle').focus();
     }
-
-    window.deleteTeacher = async function(id) {
-      if(confirm('¿Eliminar profesor?')) await deleteDoc(doc(db, "profesores", id));
-    }
+    window.deleteTeacher = async function(id) { if(confirm('¿Eliminar profesor?')) await deleteDoc(doc(db, "profesores", id)); }
 
     // ESTUDIOS
     window.handleAddStudy = async function(e) {
       e.preventDefault();
       const subject = document.getElementById('studySubject').value.trim();
       const notes = document.getElementById('studyNotes').value.trim();
-
       await addDoc(collection(db, "estudios"), { subject, notes, createdAt: new Date().toISOString() });
       e.target.reset();
     }
-
     function renderStudies() {
       const container = document.getElementById('studiesList');
       if(!container) return;
       container.innerHTML = '';
-
       window.studiesList.forEach(s => {
         const div = document.createElement('div');
         div.className = 'p-4 rounded-2xl glass-card border border-slate-800 flex items-center justify-between gap-3';
-        div.innerHTML = `
-          <div>
-            <h5 class="font-bold text-xs text-white">${s.subject}</h5>
-            <p class="text-[11px] text-slate-400 mt-0.5">${s.notes}</p>
-          </div>
-          <button onclick="deleteStudy('${s.id}')" class="p-2 bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white rounded-xl text-xs shrink-0 transition-all"><i class="fa-solid fa-trash"></i></button>
-        `;
+        div.innerHTML = `<div><h5 class="font-bold text-xs text-white">${s.subject}</h5><p class="text-[11px] text-slate-400 mt-0.5">${s.notes}</p></div><button onclick="deleteStudy('${s.id}')" class="p-2 bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white rounded-xl text-xs shrink-0 transition-all"><i class="fa-solid fa-trash"></i></button>`;
         container.appendChild(div);
       });
     }
+    window.deleteStudy = async function(id) { if(confirm('¿Eliminar tema?')) await deleteDoc(doc(db, "estudios", id)); }
 
-    window.deleteStudy = async function(id) {
-      if(confirm('¿Eliminar tema?')) await deleteDoc(doc(db, "estudios", id));
+    // NOTIFICACIONES Y CUENTA REGRESIVA
+    window.handleAddNotification = async function(e) {
+      e.preventDefault();
+      const title = document.getElementById('notifTitle').value.trim();
+      const subject = document.getElementById('notifSubject').value.trim();
+      const datetime = document.getElementById('notifDatetime').value;
+      await addDoc(collection(db, "notificaciones"), { title, subject, datetime, createdAt: new Date().toISOString() });
+      e.target.reset();
     }
+
+    function renderNotifications() {
+      const container = document.getElementById('notificationsList');
+      if(!container) return;
+      container.innerHTML = '';
+      if(window.notificationsList.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 italic col-span-full text-center py-4">No hay exposiciones o entregas registradas aún.</p>`;
+        return;
+      }
+      window.notificationsList.forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'p-5 rounded-2xl glass-card border border-slate-800 space-y-3 relative overflow-hidden';
+        div.setAttribute('data-datetime', n.datetime);
+        div.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 px-2.5 py-0.5 rounded-full font-bold">${n.subject}</span>
+              <h5 class="font-extrabold text-sm text-white mt-1.5">${n.title}</h5>
+            </div>
+            <button onclick="deleteNotification('${n.id}')" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
+          </div>
+          <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+            <i class="fa-regular fa-calendar-days text-brand-400"></i> Fecha límite: <strong class="text-slate-200">${new Date(n.datetime).toLocaleString('es-ES', {dateStyle: 'medium', timeStyle: 'short'})}</strong>
+          </div>
+          <div class="countdown-box bg-slate-900/90 border border-slate-800/90 p-3 rounded-xl flex items-center justify-around text-center">
+            <div><span class="days text-lg font-black text-indigo-400 block">00</span><span class="text-[9px] uppercase text-slate-400">Días</span></div>
+            <span class="text-slate-600 font-bold">:</span>
+            <div><span class="hours text-lg font-black text-indigo-400 block">00</span><span class="text-[9px] uppercase text-slate-400">Horas</span></div>
+            <span class="text-slate-600 font-bold">:</span>
+            <div><span class="minutes text-lg font-black text-indigo-400 block">00</span><span class="text-[9px] uppercase text-slate-400">Min</span></div>
+            <span class="text-slate-600 font-bold">:</span>
+            <div><span class="seconds text-lg font-black text-emerald-400 block">00</span><span class="text-[9px] uppercase text-slate-400">Seg</span></div>
+          </div>
+          <div class="status-alert text-[11px] font-bold text-center py-1 rounded-lg bg-slate-900 text-slate-400">Calculando tiempo...</div>
+        `;
+        container.appendChild(div);
+      });
+      updateCountdowns();
+    }
+
+    function updateCountdowns() {
+      const cards = document.querySelectorAll('#notificationsList > div');
+      const now = new Date().getTime();
+      cards.forEach(card => {
+        const datetimeStr = card.getAttribute('data-datetime');
+        if(!datetimeStr) return;
+        const targetTime = new Date(datetimeStr).getTime();
+        const diff = targetTime - now;
+
+        const daysEl = card.querySelector('.days');
+        const hoursEl = card.querySelector('.hours');
+        const minutesEl = card.querySelector('.minutes');
+        const secondsEl = card.querySelector('.seconds');
+        const alertEl = card.querySelector('.status-alert');
+
+        if (diff <= 0) {
+          if(daysEl) daysEl.textContent = "00";
+          if(hoursEl) hoursEl.textContent = "00";
+          if(minutesEl) minutesEl.textContent = "00";
+          if(secondsEl) secondsEl.textContent = "00";
+          if(alertEl) {
+            alertEl.className = "status-alert text-[11px] font-bold text-center py-1.5 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse";
+            alertEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ¡EL PLAZO HA VENCIDO / ES HOY!`;
+          }
+        } else {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+          if(daysEl) daysEl.textContent = String(days).padStart(2, '0');
+          if(hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+          if(minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+          if(secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+
+          if(alertEl) {
+            if (days === 0) {
+              alertEl.className = "status-alert text-[11px] font-bold text-center py-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-bounce";
+              alertEl.innerHTML = `<i class="fa-solid fa-bell"></i> ¡ATENCIÓN: ES HOY LA ENTREGA/EXPOSICIÓN!`;
+            } else if (days <= 2) {
+              alertEl.className = "status-alert text-[11px] font-bold text-center py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30";
+              alertEl.innerHTML = `<i class="fa-solid fa-clock"></i> ¡Quedan pocos días! Prepárate con tiempo.`;
+            } else {
+              alertEl.className = "status-alert text-[11px] font-bold text-center py-1.5 rounded-lg bg-slate-900 text-emerald-400 border border-slate-800";
+              alertEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> A tiempo (${days} días restantes)`;
+            }
+          }
+        }
+      });
+    }
+
+    window.deleteNotification = async function(id) { if(confirm('¿Eliminar esta notificación?')) await deleteDoc(doc(db, "notificaciones", id)); }
   </script>
 </body>
 </html>
