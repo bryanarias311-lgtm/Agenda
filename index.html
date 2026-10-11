@@ -273,52 +273,98 @@
         </div>
       </section>
 
-      <!-- PANEL DE ADMINISTRACIÓN (OCULTO POR DEFECTO) -->
-      <section id="adminSection" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-          <div>
-            <h3 class="text-xl font-black text-white flex items-center gap-2.5">
-              <i class="fa-solid fa-user-shield text-brand-400"></i> Panel de Control - Administrador (En Vivo)
-            </h3>
-            <p class="text-xs text-slate-400 mt-0.5">Sincronizado en tiempo real con Firebase Firestore.</p>
+      <!-- PANEL DE ADMINISTRACIÓN MODERNIZADO Y BACANO -->
+      <section id="adminSection" class="hidden relative rounded-3xl p-6 sm:p-8 bg-slate-950/90 border border-slate-800/80 shadow-2xl space-y-8 backdrop-blur-2xl">
+        
+        <!-- Glow Decorativo del Panel -->
+        <div class="absolute -top-12 -right-12 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Encabezado del Panel -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6 relative z-10">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-brand-500/25">
+              <i class="fa-solid fa-shield-halved text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                Centro de Control <span class="bg-brand-500/10 text-brand-400 text-xs px-2.5 py-0.5 rounded-full border border-brand-500/30 font-bold">Admin</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Gestión y monitoreo de citas en tiempo real.</p>
+            </div>
           </div>
-          <button onclick="closeAdminPanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all self-start sm:self-auto cursor-pointer">
-            <i class="fa-solid fa-xmark mr-1"></i> Cerrar Panel
-          </button>
+
+          <div class="flex items-center gap-3">
+            <!-- Buscador en tiempo real -->
+            <div class="relative w-full sm:w-64">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+              <input type="text" id="adminSearchInput" onkeyup="filterAdminTable()" placeholder="Buscar cliente..." class="w-full pl-9 pr-4 py-2 bg-slate-900/90 border border-slate-800 rounded-xl text-white placeholder-slate-500 text-xs focus:outline-none focus:border-brand-500 transition-all">
+            </div>
+
+            <button onclick="closeAdminPanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-2">
+              <i class="fa-solid fa-xmark"></i> <span>Cerrar</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Estadísticas en vivo -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <span class="text-slate-400 text-xs font-semibold block mb-1">Total de citas</span>
-            <span id="statTotal" class="text-2xl font-black text-white">0</span>
+        <!-- Estadísticas en Vivo - Estilo Tarjetas Neón -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+          <!-- Total -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
+            <div>
+              <span class="text-slate-400 text-xs font-medium block">Total Citas</span>
+              <span id="statTotal" class="text-3xl font-black text-white mt-1 block">0</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <span class="text-slate-400 text-xs font-semibold block mb-1">Pendientes</span>
-            <span id="statPending" class="text-2xl font-black text-amber-400">0</span>
+
+          <!-- Pendientes -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
+            <div>
+              <span class="text-slate-400 text-xs font-medium block">Pendientes</span>
+              <span id="statPending" class="text-3xl font-black text-amber-400 mt-1 block">0</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <span class="text-slate-400 text-xs font-semibold block mb-1">Confirmadas</span>
-            <span id="statConfirmed" class="text-2xl font-black text-emerald-400">0</span>
+
+          <!-- Confirmadas -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
+            <div>
+              <span class="text-slate-400 text-xs font-medium block">Confirmadas</span>
+              <span id="statConfirmed" class="text-3xl font-black text-emerald-400 mt-1 block">0</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <span class="text-slate-400 text-xs font-semibold block mb-1">Canceladas</span>
-            <span id="statCancelled" class="text-2xl font-black text-rose-400">0</span>
+
+          <!-- Canceladas -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800/80 flex items-center justify-between">
+            <div>
+              <span class="text-slate-400 text-xs font-medium block">Canceladas</span>
+              <span id="statCancelled" class="text-3xl font-black text-rose-400 mt-1 block">0</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </div>
           </div>
         </div>
 
-        <!-- Tabla de Citas -->
-        <div class="overflow-x-auto">
+        <!-- Tabla Estilizada tipo Tarjetas de Citas -->
+        <div class="overflow-x-auto relative z-10 rounded-2xl border border-slate-800/80 bg-slate-900/40">
           <table class="w-full text-left text-xs">
             <thead>
-              <tr class="text-slate-400 border-b border-slate-800 uppercase tracking-wider">
-                <th class="py-3 px-4">Fecha</th>
-                <th class="py-3 px-4">Cliente</th>
-                <th class="py-3 px-4">Categoría</th>
-                <th class="py-3 px-4">Teléfono</th>
-                <th class="py-3 px-4">Motivo</th>
-                <th class="py-3 px-4">Estado</th>
-                <th class="py-3 px-4 text-right">Acciones</th>
+              <tr class="text-slate-400 bg-slate-900/80 border-b border-slate-800 uppercase tracking-wider font-semibold">
+                <th class="py-4 px-5">Fecha</th>
+                <th class="py-4 px-5">Cliente</th>
+                <th class="py-4 px-5">Categoría</th>
+                <th class="py-4 px-5">Contacto / WhatsApp</th>
+                <th class="py-4 px-5">Motivo</th>
+                <th class="py-4 px-5">Estado</th>
+                <th class="py-4 px-5 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody id="appointmentsTableBody" class="divide-y divide-slate-800/60">
@@ -331,15 +377,15 @@
     </main>
   </div>
 
-  <!-- MODAL DE CONTRASEÑA ADMIN -->
+  <!-- MODAL DE CONTRASEÑA ADMIN (SIN REVELAR LA CLAVE) -->
   <div id="passwordModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-slate-800 text-center space-y-4">
-      <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto text-brand-400">
+    <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-slate-800 text-center space-y-4 shadow-2xl">
+      <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto text-brand-400 shadow-md">
         <i class="fa-solid fa-key text-xl"></i>
       </div>
       <h3 class="text-lg font-bold text-white">Acceso Administrador</h3>
       <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-        <input type="password" id="adminPasswordInput" required placeholder="Ingresa la contraseña (2020)..." class="w-full p-3 glass-input rounded-xl text-center text-white focus:outline-none text-xs">
+        <input type="password" id="adminPasswordInput" required placeholder="Ingresa la contraseña..." class="w-full p-3 glass-input rounded-xl text-center text-white focus:outline-none text-xs">
         <div class="flex gap-2">
           <button type="button" onclick="closePasswordModal()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold cursor-pointer">Cancelar</button>
           <button type="submit" class="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold cursor-pointer">Ingresar</button>
@@ -401,7 +447,6 @@
       setupRealtimeListener();
     });
 
-    // Reloj digital y fecha estilo dashboard
     function initClock() {
       const clockEl = document.getElementById('digitalClock');
       const dateEl = document.getElementById('dateLabel');
@@ -564,23 +609,39 @@
         if (app.status === 'Cancelada') cancelled++;
 
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-900/50 transition-colors';
+        tr.className = 'hover:bg-slate-800/40 transition-colors border-b border-slate-800/60';
         
-        let statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Pendiente</span>`;
-        if (app.status === 'Confirmada') statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Confirmada</span>`;
-        if (app.status === 'Cancelada') statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">Cancelada</span>`;
+        let statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Pendiente</span>`;
+        if (app.status === 'Confirmada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-check text-[9px]"></i> Confirmada</span>`;
+        if (app.status === 'Cancelada') statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20"><i class="fa-solid fa-xmark text-[9px]"></i> Cancelada</span>`;
+
+        const cleanPhone = app.phone.replace(/[^0-9]/g, '');
+        const initial = app.clientName ? app.clientName.charAt(0).toUpperCase() : 'C';
 
         tr.innerHTML = `
-          <td class="py-3.5 px-4 text-white font-medium">${app.date}</td>
-          <td class="py-3.5 px-4 text-slate-200 font-semibold">${app.clientName}</td>
-          <td class="py-3.5 px-4 text-slate-400">${app.category}</td>
-          <td class="py-3.5 px-4 text-brand-400 font-mono">${app.phone}</td>
-          <td class="py-3.5 px-4 text-slate-300 max-w-xs truncate" title="${app.reason}">${app.reason}</td>
-          <td class="py-3.5 px-4">${statusBadge}</td>
-          <td class="py-3.5 px-4 text-right space-x-1">
-            <button onclick="updateStatus('${app.id}', 'Confirmada')" class="p-1.5 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white rounded-lg transition-all" title="Confirmar"><i class="fa-solid fa-check"></i></button>
-            <button onclick="updateStatus('${app.id}', 'Cancelada')" class="p-1.5 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all" title="Cancelar"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="deleteAppointment('${app.id}')" class="p-1.5 bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+          <td class="py-4 px-5 text-white font-medium flex items-center gap-2">
+            <i class="fa-regular fa-calendar text-brand-400"></i> ${app.date}
+          </td>
+          <td class="py-4 px-5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-500 to-indigo-600 font-bold text-white flex items-center justify-center text-xs shadow-sm">
+                ${initial}
+              </div>
+              <span class="text-slate-100 font-semibold">${app.clientName}</span>
+            </div>
+          </td>
+          <td class="py-4 px-5 text-slate-300 font-medium">${app.category}</td>
+          <td class="py-4 px-5">
+            <a href="https://wa.me/${cleanPhone}" target="_blank" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-mono transition-all">
+              <i class="fa-brands fa-whatsapp text-sm"></i> ${app.phone}
+            </a>
+          </td>
+          <td class="py-4 px-5 text-slate-300 max-w-xs truncate" title="${app.reason}">${app.reason}</td>
+          <td class="py-4 px-5">${statusBadge}</td>
+          <td class="py-4 px-5 text-right space-x-1.5">
+            <button onclick="updateStatus('${app.id}', 'Confirmada')" class="p-2 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 rounded-xl transition-all" title="Confirmar Cita"><i class="fa-solid fa-check"></i></button>
+            <button onclick="updateStatus('${app.id}', 'Cancelada')" class="p-2 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl transition-all" title="Cancelar Cita"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="deleteAppointment('${app.id}')" class="p-2 bg-slate-800 text-slate-400 hover:bg-rose-950 hover:text-rose-300 rounded-xl transition-all" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -590,6 +651,15 @@
       document.getElementById('statPending').textContent = pending;
       document.getElementById('statConfirmed').textContent = confirmed;
       document.getElementById('statCancelled').textContent = cancelled;
+    }
+
+    window.filterAdminTable = function() {
+      const query = document.getElementById('adminSearchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#appointmentsTableBody tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
     }
 
     window.updateStatus = async function(id, newStatus) {
